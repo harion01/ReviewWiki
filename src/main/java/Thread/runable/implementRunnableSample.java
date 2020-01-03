@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 public class implementRunnableSample extends basic implements Runnable{
 

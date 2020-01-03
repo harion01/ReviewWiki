@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 public class waitingWorker implements Runnable {
     public void run() {

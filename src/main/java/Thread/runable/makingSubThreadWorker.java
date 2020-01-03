@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 public class makingSubThreadWorker implements Runnable {
     public void run() {

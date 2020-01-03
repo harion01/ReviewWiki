@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 public class threadTestRunner {
     public static void main(String args[]){

@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 public class extendThreadSample extends Thread {
     public void run(){

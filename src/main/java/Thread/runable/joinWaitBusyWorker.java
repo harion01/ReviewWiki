@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 public class joinWaitBusyWorker implements Runnable {
     boolean isActiveBusy = false;

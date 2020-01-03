@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 public class sleepingWorker implements Runnable{
     public void setSleepLimit(int sleepLimit) {

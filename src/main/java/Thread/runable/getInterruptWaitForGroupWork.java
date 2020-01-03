@@ -1,4 +1,4 @@
-package Thread;
+package Thread.runable;
 
 public class getInterruptWaitForGroupWork implements Runnable {
     public void run() {
