@@ -8,157 +8,88 @@ import static java.util.stream.Collectors.toList;
 
 
 public class Triplet {
-    public static Integer firstCnt =null;
-    public static Integer secondCnt = null;
-    public static Integer thirdCnt = null;
+    public static Long firstCnt =null;
+    public static Long secondCnt = null;
+    public static Long thirdCnt = null;
     // Complete the countTriplets function below.
     static long countTriplets(List<Long> arr, long r) {
-        /* poor time complex logic
-        Collections.sort(arr);
-        HashMap<Long, Integer> numCountMap = makeNumCountMap(arr);
-        Long maxNum = arr.get(arr.size()-1);
-        count = countGeoCombination(numCountMap,maxNum ,r );
-         */
 
-        HashMap<Long, Integer> numCountMap = new HashMap<>();
-        long maxNum = distinctArr(numCountMap, arr);
-        long count = countSimpleGeoCombination(numCountMap,maxNum ,r );
+        HashMap<Long, Long> numCountMap = new HashMap<>();
+        distinctArr(numCountMap, arr);
+        long count = countGeoCombination(numCountMap ,r );
 
         return count;
     }
 
 
-    private static long distinctArr(HashMap<Long, Integer> numCountMap, List<Long> arr) {
-        long max = 0;
+    private static void distinctArr(HashMap<Long, Long> numCountMap, List<Long> arr) {
+
         for(Long oneNum : arr) {
-            Integer count = numCountMap.get(oneNum);
+            Long count = numCountMap.get(oneNum);
             if (count == null) {
-                numCountMap.put(oneNum, 1);
+                numCountMap.put(oneNum, (long)1);
             } else {
                 count++;
                 numCountMap.put(oneNum, count);
             }
 
-            if(max < oneNum)
-                max = oneNum;
         }
         System.out.println("Map : "+numCountMap);
-        return max;
     }
 
-    private static long countSimpleGeoCombination(HashMap<Long, Integer> numCountMap, long maxNum, long ratio) {
+    private static long countGeoCombination(HashMap<Long, Long> numCountMap, long ratio) {
         long totalCombinationCnt = 0;
-        if(ratio == 1){
-            return calcOneRatioCase(numCountMap);
-        }
-        Long geoValue = initGeoElement(numCountMap, ratio);
+        long oneGeoCombCnt = 0;
 
-        while(geoValue <= maxNum){
-            System.out.println("fisrt:" +firstCnt + " second:"+ secondCnt+" third:"+thirdCnt);
-            if(firstCnt != null && secondCnt != null && thirdCnt != null){
-                totalCombinationCnt = totalCombinationCnt + firstCnt * secondCnt * thirdCnt;
+        for(Long oneKey : numCountMap.keySet()){
+            if(initGeoCount(numCountMap, oneKey, ratio)){
+                oneGeoCombCnt = countOneGeoCombination(ratio);
+                totalCombinationCnt = totalCombinationCnt + oneGeoCombCnt;
+            }else{
+                continue;
             }
-
-            geoValue = geoValue*ratio;
-            shiftGeoValue(numCountMap,  geoValue );
-
-
         }
+
         return totalCombinationCnt;
     }
 
-    private static long calcOneRatioCase(HashMap<Long, Integer> numCountMap) {
-        Long key = Long.valueOf(1);
-        Integer elementCnt = numCountMap.get(key);
-        if(elementCnt == null){
-            return 0;
+    private static long countOneGeoCombination(long ratio) {
+        long count = 0;
+        if(ratio ==1){
+            count =  calcOneRatioCase();
         }else {
-            return elementCnt * (elementCnt-1) * (elementCnt-2);
+            count = firstCnt * secondCnt * thirdCnt;
+            System.out.println("combination count : "+firstCnt + " * "+secondCnt+" * "+thirdCnt+ " = "+count);
         }
-    }
-
-
-    public static Long initGeoElement(HashMap<Long, Integer> numCountMap,  long ratio){
-        Long geoValue = Long.valueOf(1);
-        firstCnt = numCountMap.get(geoValue);
-        geoValue = geoValue*ratio;
-        secondCnt = numCountMap.get(geoValue);
-        geoValue = geoValue*ratio;
-        thirdCnt = numCountMap.get(geoValue);
-        return geoValue;
-    }
-
-
-    private static void shiftGeoValue(HashMap<Long, Integer> numCountMap,  Long geoValue) {
-        firstCnt = secondCnt;
-        secondCnt = thirdCnt;
-        thirdCnt = numCountMap.get(geoValue);
-    }
-
-
-
-    /*
-        private static HashMap<Integer, Integer> makeGeoMap(List<Long> arr, long r) {
-            HashMap<Integer, Integer> geoMap = new HashMap<>();
-            long curGeoVal = 1;
-            long maxVal = arr.get(arr.size()-1);
-
-            HashMap<Long, Integer> numCountMap = new HashMap<>();
-            for(Long oneNum : arr){
-                Integer count = numCountMap.get(oneNum);
-                if(count == null){
-                    numCountMap.put(oneNum, 1);
-                }else {
-                    count++;
-                    numCountMap.put(oneNum, count);
-                }
-            }
-            while(curGeoVal < maxVal){
-                curGeoVal = curGeoVal * r;
-            }
-        }
-    */
-    private static HashMap<Long, Integer> makeNumCountMap(List<Long> arr) {
-        HashMap<Long, Integer> numCountMap = new HashMap<>();
-        for(Long oneNum : arr) {
-            Integer count = numCountMap.get(oneNum);
-            if (count == null) {
-                numCountMap.put(oneNum, 1);
-            } else {
-                count++;
-                numCountMap.put(oneNum, count);
-            }
-        }
-        //System.out.println("Map : "+numCountMap);
-        return numCountMap;
-    }
-
-    private static long countGeoCombination(HashMap<Long, Integer> numCountMap, Long maxNum ,Long ratio) {
-        int n = 0;
-        long total = 0;
-        while (Math.pow(ratio, n+2) <= maxNum){
-            Integer first = getNumCount(numCountMap, ratio, n);
-            Integer second = getNumCount(numCountMap, ratio, n+1);
-            Integer third = getNumCount(numCountMap, ratio, n+2);
-            if(first != null && second != null && third != null){
-                total = total + first*second*third;
-            }
-            n++;
-        }
-        return total;
-    }
-
-
-
-
-
-
-    private static Integer getNumCount(HashMap<Long, Integer> numCountMap, Long ratio, int n){
-        double target =  Math.pow(ratio, n);
-        Integer count = numCountMap.get(Long.valueOf((long) target));
-        //System.out.println("target:"+target+ " count:"+count );
         return count;
     }
+
+    private static boolean initGeoCount(HashMap<Long, Long> numCountMap, Long oneKey, long ratio) {
+        if(oneKey % ratio != 0){
+            return false;
+        }
+
+
+        firstCnt = numCountMap.get(oneKey/ratio);
+        secondCnt = numCountMap.get(oneKey);
+        thirdCnt = numCountMap.get(oneKey*ratio);
+        boolean isIncluded = firstCnt != null && secondCnt != null && thirdCnt != null;
+        if(isIncluded) {
+            System.out.println("Goe combination : " + oneKey / ratio + " , " + oneKey + " , " + oneKey * ratio);
+        }
+        return isIncluded;
+    }
+
+    private static long calcOneRatioCase() {
+        if(firstCnt <= 3){
+            return 0;
+        }
+
+        return (long)(firstCnt*(secondCnt-1)*(thirdCnt-2) )/ (3*2);
+    }
+
+
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
