@@ -49,7 +49,7 @@ public class palindromeLinkedList {
         ListNode wordNode = head;
         int middle = nodeSize/2;
         String firstWord = "";
-        for(int firstIdx = 0 ; firstIdx < middle ; firstIdx++ ){
+        for(int firstMoveCount = 0 ; firstMoveCount < middle ; firstMoveCount++ ){
             firstWord = firstWord + wordNode.val;
             wordNode = wordNode.next;
         }
@@ -59,7 +59,7 @@ public class palindromeLinkedList {
         }
 
         String secondWord = "";
-        for(int secondIdx = 0 ; secondIdx < middle ; secondIdx++ ){
+        for(int secondMoveCount = 0 ; secondMoveCount < middle ; secondMoveCount++ ){
             secondWord = wordNode.val + secondWord;
             wordNode = wordNode.next;
         }

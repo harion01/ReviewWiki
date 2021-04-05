@@ -27,6 +27,14 @@ class middleLinkedList {
             middle = middle.next;
         }
         //System.out.println("size : "+nodeSize +" position : "+position);
+
+
+        while(middle.next != null){
+            System.out.println("vale  : "+middle.val );
+            middle = middle.next;
+        }
+
         return middle;
     }
 }
+
