@@ -1,4 +1,4 @@
-package Theory.algorithm.sort;
+package Theory.sort;
 
 import java.util.ArrayList;
 
