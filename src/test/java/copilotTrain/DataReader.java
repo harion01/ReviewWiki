@@ -39,21 +39,39 @@ public class DataReader {
 
     //parse section of data from given fileContent
     //return list of string
-    public List<String> parseSection(String fileContent, String Section){
-        List<String> datas = new ArrayList<String>();
-        Pattern sectionPattern = Pattern.compile("^"+Section+"*:\\n((?:[^\\n]+\\n)*)", Pattern.MULTILINE);
-        Pattern dataPattern = Pattern.compile("^(?<data>[^\\s]+)S", Pattern.MULTILINE);
+//    public List<String> parseSection(String fileContent, String Section){
+//        List<String> datas = new ArrayList<String>();
+//        Pattern sectionPattern = Pattern.compile("^"+Section+"*:\\n((?:[^\\n]+\\n)*)", Pattern.MULTILINE);
+//        Pattern dataPattern = Pattern.compile("^(?<data>[^\\s]+)S", Pattern.MULTILINE);
+//        Matcher sectionMatcher = sectionPattern.matcher(fileContent);
+//        if(sectionMatcher.find()){
+//            String sectionContent = sectionMatcher.group(1);
+//            Matcher dataMatcher = dataPattern.matcher(sectionContent);
+//            while(dataMatcher.find()){
+//                datas.add(dataMatcher.group("data"));
+//            }
+//        }
+//        return datas;
+//    }
+//
+
+    public static List<String> parseSection(String fileContent, String section) {
+        List<String> values = new ArrayList<>();
+        Pattern sectionPattern = Pattern.compile("^" + section + ":\\s*\\n((?:.*\\n)*)", Pattern.MULTILINE);
+        Pattern dataPattern = Pattern.compile("^(?<data>.+)$", Pattern.MULTILINE);
+
         Matcher sectionMatcher = sectionPattern.matcher(fileContent);
-        if(sectionMatcher.find()){
+        if (sectionMatcher.find()) {
             String sectionContent = sectionMatcher.group(1);
+
             Matcher dataMatcher = dataPattern.matcher(sectionContent);
-            while(dataMatcher.find()){
-                datas.add(dataMatcher.group("data"));
+            while (dataMatcher.find()) {
+                values.add(dataMatcher.group("data"));
             }
         }
-        return datas;
-    }
 
+        return values;
+    }
 
 
 }
