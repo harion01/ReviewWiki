@@ -31,47 +31,30 @@ public class DataReader {
                     "UTF-8"
             );
 
-            inputArr = parseSection(data, "INPUT");
+            inputArr = parseSection(data, "INPUTSTART", "INPUTEND");
+            outputArr = parseSection(data, "OUTPUTSTART", "OUTPUTEND");
         }catch (Exception ex){
             ex.printStackTrace();
         }
     }
 
-    //parse section of data from given fileContent
-    //return list of string
-//    public List<String> parseSection(String fileContent, String Section){
-//        List<String> datas = new ArrayList<String>();
-//        Pattern sectionPattern = Pattern.compile("^"+Section+"*:\\n((?:[^\\n]+\\n)*)", Pattern.MULTILINE);
-//        Pattern dataPattern = Pattern.compile("^(?<data>[^\\s]+)S", Pattern.MULTILINE);
-//        Matcher sectionMatcher = sectionPattern.matcher(fileContent);
-//        if(sectionMatcher.find()){
-//            String sectionContent = sectionMatcher.group(1);
-//            Matcher dataMatcher = dataPattern.matcher(sectionContent);
-//            while(dataMatcher.find()){
-//                datas.add(dataMatcher.group("data"));
-//            }
-//        }
-//        return datas;
-//    }
-//
-
-    public static List<String> parseSection(String fileContent, String section) {
+    //parse section of data from given fileContent.
+    //start index is SectionStart, end index is SectionEnd
+    //parse every line between start and end
+    public List<String> parseSection(String fileContent, String SectionStart, String SectionEnd){
         List<String> values = new ArrayList<>();
-        Pattern sectionPattern = Pattern.compile("^" + section + ":\\s*\\n((?:.*\\n)*)", Pattern.MULTILINE);
-        Pattern dataPattern = Pattern.compile("^(?<data>.+)$", Pattern.MULTILINE);
-
-        Matcher sectionMatcher = sectionPattern.matcher(fileContent);
-        if (sectionMatcher.find()) {
-            String sectionContent = sectionMatcher.group(1);
-
-            Matcher dataMatcher = dataPattern.matcher(sectionContent);
-            while (dataMatcher.find()) {
-                values.add(dataMatcher.group("data"));
+        String sectionData = fileContent.substring(fileContent.indexOf(SectionStart)+SectionStart.length(), fileContent.indexOf(SectionEnd));
+        if(sectionData != null){
+            String split[] = sectionData.split("\n");
+            for(int i = 0; i < split.length; i++){
+                String data = split[i].trim();
+                if(data.length() > 0){
+                    values.add(data);
+                }
             }
         }
 
         return values;
     }
-
 
 }

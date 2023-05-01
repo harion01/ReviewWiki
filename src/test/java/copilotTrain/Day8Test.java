@@ -1,6 +1,7 @@
 package copilotTrain;
 
-import org.testng.annotations.Test;
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,14 @@ public class Day8Test {
     @Test
     public void TestMain() {
         List<String> inputArr = reader.getInputArr();
+        List<String> outputArr = reader.getOutputArr();
+        String expected = "";
+        for(String output : outputArr){
+            expected = expected + output + "\n";
+        }
+
         String result = d8.run(inputArr);
-        String expected = "sam=99912222\n" +
-                "Not found\n" +
-                "harry=12299933\n";
+
         assertEquals(expected, result);
 
     }
